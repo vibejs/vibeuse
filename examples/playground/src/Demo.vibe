@@ -1,0 +1,28 @@
+<script setup lang="ts">
+import { useTemplateRef } from '@usevibejs/ui';
+import { createDemo, useDemoReadout } from './demos.ts';
+const { name } = defineProps<{ name: string }>();
+const surface = useTemplateRef<HTMLElement>('surface');
+const field = useTemplateRef<HTMLInputElement>('field');
+const demo = createDemo(name, surface, field);
+const output = useDemoReadout(demo);
+const edit = (event: Event) => { if (demo.input) demo.input.value = (event.target as HTMLInputElement).value; };
+</script>
+<template>
+  <section class="live-demo" :data-demo="name" aria-label="Interactive example">
+    <div class="demo-label"><span class="status-dot" /> Live example <span class="mono">.vibe</span></div>
+    <p>{{ demo.hint }}</p>
+    <label v-if="demo.input" class="field-label">Value <input :value="demo.input.value" @input="edit" :aria-label="name + ' value'" /></label>
+    <div v-if="demo.surface === 'intersection'" class="intersection-viewport"><div class="intersection-space">Scroll down to the observed element ↓</div><div ref="surface" class="demo-surface">Observed element</div><div class="intersection-space">Scroll back up ↑</div></div>
+    <div v-else-if="demo.surface === 'scroll'" ref="surface" class="scroll-viewport" tabindex="0" aria-label="Scrollable preview"><div class="scroll-content">Scroll horizontally and vertically <span>End of the scroll area</span></div></div>
+    <label v-else-if="demo.surface === 'focus'" class="field-label">Focus target <input ref="field" placeholder="Focus me" /></label>
+    <div v-else-if="demo.surface" ref="surface" :class="['demo-surface', { resizable: demo.surface === 'size' }]" tabindex="0" aria-label="Interactive surface">
+      <div v-if="demo.surface === 'outside'" class="dropdown-preview"><div v-if="demo.open?.value" class="dropdown-menu" aria-label="Example dropdown"><button type="button">Profile</button><button type="button">Settings</button></div><span v-else>Dropdown closed</span></div>
+      <span v-else-if="demo.surface === 'mouse'">Move your mouse here</span>
+      <span v-else-if="demo.surface === 'size'">Drag to resize ↘</span>
+      <span v-else>Observed surface</span>
+    </div>
+    <div v-if="demo.actions.length" class="actions"><button v-for="action in demo.actions" :key="action.label" type="button" @click="action.run()">{{ action.label }}</button></div>
+    <output class="readout" aria-live="off"><pre>{{ output }}</pre></output>
+  </section>
+</template>

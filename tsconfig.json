@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
-    "target": "ES2022", "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "module": "Preserve", "moduleResolution": "Bundler", "strict": true,
-    "verbatimModuleSyntax": true, "allowImportingTsExtensions": true,
-    "noEmit": true, "skipLibCheck": false, "types": ["node"]
+    "target": "ES2022",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "skipLibCheck": false,
+    "types": ["node"]
   },
   "include": ["src", "test", "*.config.ts"],
   "exclude": ["test/**/*.vibe.test.ts"]

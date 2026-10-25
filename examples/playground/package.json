@@ -1,0 +1,13 @@
+{
+  "name": "vibeuse-playground",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@usevibejs/ui": "0.1.0",
+    "@usevibejs/use": "workspace:*"
+  },
+  "devDependencies": {
+    "@usevibejs/language-tools": "0.1.0",
+    "typescript": "7.1.0-dev.20261015.1"
+  }
+}
