@@ -1,0 +1,28 @@
+<script setup lang="ts">
+import { ref, useTemplateRef } from '@usevibejs/ui';
+import { useCounter, useElementSize, useEventBus, useEventListener, useIntervalFn, useRefHistory } from '@usevibejs/use';
+const count = useCounter();
+const countValue = count.count;
+const value = ref(0);
+const history = useRefHistory(value, { clone: n => n });
+const element = useTemplateRef<HTMLElement>('element');
+const size = useElementSize(element);
+const width = size.width;
+const shown = ref(true);
+const events = ref(0);
+const bus = useEventBus<number>();
+bus.on(n => { events.value += n; });
+useEventListener(window, 'fixture-event', () => { events.value++; });
+const ticks = ref(0);
+useIntervalFn(() => ticks.value++, 20);
+</script>
+<template>
+  <section class="fixture">
+    <button class="increment" type="button" @click="count.inc()">Increment</button><output class="count">{{ countValue }}</output>
+    <button class="record" type="button" @click="value++">Record</button><button class="undo" type="button" @click="history.undo">Undo</button><output class="history-value">{{ value }}</output>
+    <button class="emit" type="button" @click="bus.emit(2)">Emit</button><output class="event-value">{{ events }}</output>
+    <button class="replace" type="button" @click="shown = !shown">Replace target</button>
+    <div v-if="shown" ref="element" style="width: 120px; height: 60px">Measured element</div>
+    <output class="measured">{{ width }}</output><output class="ticks">{{ ticks }}</output>
+  </section>
+</template>

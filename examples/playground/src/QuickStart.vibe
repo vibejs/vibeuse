@@ -1,0 +1,11 @@
+<script setup lang="ts">
+import { ref } from '@usevibejs/ui';
+import { useDebounce } from '@usevibejs/use';
+const input = ref('');
+const { value: search } = useDebounce(input, 250);
+</script>
+
+<template>
+  <label>Search <input v-model="input" /></label>
+  <p>{{ search }}</p>
+</template>
