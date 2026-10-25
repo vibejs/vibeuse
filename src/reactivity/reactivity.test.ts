@@ -1,0 +1,245 @@
+import { describe, expect, it, vi } from 'vitest';
+import { computed, effectScope, ref, shallowRef } from '@usevibejs/ui';
+import { useCounter, useCycle, useEventBus, usePrevious, useToggle } from './state.ts';
+import { useDebounce, useDebounceFn, useThrottle, useThrottleFn } from './timing.ts';
+import { useRefHistory } from './history.ts';
+
+describe('state composables', () => {
+  it('clamps counters and resets; validates bounds', () => {
+    const counter = useCounter(2, { min: 0, max: 3 });
+    counter.inc(5);
+    expect(counter.count.value).toBe(3);
+    counter.dec(8);
+    expect(counter.count.value).toBe(0);
+    counter.set(1);
+    counter.reset();
+    expect(counter.count.value).toBe(2);
+    expect(() => useCounter(0, { min: 2, max: 1 })).toThrow(RangeError);
+    expect(useCounter().count.value).toBe(0);
+  });
+  it('toggles, cycles negative indices, reacts to list replacement and empty lists', () => {
+    const toggle = useToggle();
+    expect(toggle.toggle()).toBe(true);
+    toggle.set(false);
+    expect(toggle.value.value).toBe(false);
+    const items = shallowRef<readonly string[]>(['a', 'b']);
+    const cycle = useCycle(items);
+    cycle.prev();
+    expect(cycle.state.value).toBe('b');
+    cycle.next();
+    expect(cycle.state.value).toBe('a');
+    cycle.next(3);
+    expect(cycle.index.value).toBe(1);
+    items.value = [];
+    expect(cycle.index.value).toBe(-1);
+    expect(cycle.state.value).toBeUndefined();
+    items.value = ['x'];
+    cycle.reset();
+    expect(cycle.state.value).toBe('x');
+  });
+  it('tracks previous getter values synchronously and stops', () => {
+    const input = ref(1);
+    const previous = usePrevious(computed(() => input.value * 2));
+    expect(previous.previous.value).toBeUndefined();
+    input.value = 2;
+    expect(previous.previous.value).toBe(2);
+    previous.stop();
+    input.value = 3;
+    expect(previous.previous.value).toBe(2);
+  });
+  it('isolates buses and owns subscriptions by the subscribing scope', () => {
+    const bus = useEventBus<number>();
+    const other = useEventBus<number>();
+    const listener = vi.fn();
+    const scope = effectScope();
+    scope.run(() => bus.on(listener));
+    other.emit(0);
+    bus.emit(1);
+    expect(listener).toHaveBeenCalledExactlyOnceWith(1);
+    scope.stop();
+    bus.emit(2);
+    expect(listener).toHaveBeenCalledTimes(1);
+    const off = bus.on(listener);
+    off();
+    bus.emit(3);
+    bus.on(listener);
+    bus.clear();
+    bus.emit(4);
+    bus.on(listener);
+    bus.stop();
+    bus.emit(5);
+    bus.on(listener);
+    expect(listener).toHaveBeenCalledTimes(1);
+    other.stop();
+  });
+});
+
+describe('timing filters', () => {
+  it('debounces latest arguments, flushes, cancels and respects disposal', () => {
+    vi.useFakeTimers();
+    const fn = vi.fn((n: number) => n * 2);
+    const d = useDebounceFn(fn, 100);
+    d.call(1);
+    vi.advanceTimersByTime(60);
+    d.call(2);
+    vi.advanceTimersByTime(99);
+    expect(fn).not.toHaveBeenCalled();
+    expect(d.flush()).toBe(4);
+    expect(d.isPending.value).toBe(false);
+    d.call(3);
+    d.cancel();
+    vi.runAllTimers();
+    expect(fn).toHaveBeenCalledTimes(1);
+    d.call(4);
+    d.stop();
+    d.call(5);
+    vi.runAllTimers();
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+  it('supports debounce leading, trailing false, maxWait and reactive delays', () => {
+    vi.useFakeTimers();
+    const fn = vi.fn();
+    const ms = ref(100);
+    const d = useDebounceFn(fn, () => ms.value, { leading: true, maxWait: 150 });
+    d.call();
+    expect(fn).toHaveBeenCalledTimes(1);
+    vi.advanceTimersByTime(80);
+    d.call();
+    vi.advanceTimersByTime(70);
+    expect(fn).toHaveBeenCalledTimes(2);
+    ms.value = -1;
+    d.call();
+    vi.runAllTimers();
+    expect(fn).toHaveBeenCalledTimes(3);
+    d.stop();
+    const noTrailing = useDebounceFn(fn, 1, { trailing: false });
+    noTrailing.call();
+    vi.runAllTimers();
+    expect(fn).toHaveBeenCalledTimes(3);
+    noTrailing.stop();
+  });
+  it('throttles leading/trailing calls and cancellation', () => {
+    vi.useFakeTimers();
+    const fn = vi.fn();
+    const throttle = useThrottleFn(fn, 100);
+    throttle.call(1);
+    throttle.call(2);
+    throttle.call(3);
+    expect(fn).toHaveBeenCalledExactlyOnceWith(1);
+    vi.advanceTimersByTime(100);
+    expect(fn).toHaveBeenLastCalledWith(3);
+    throttle.call(4);
+    throttle.cancel();
+    throttle.stop();
+    throttle.call(5);
+    vi.runAllTimers();
+    expect(fn).toHaveBeenCalledTimes(3);
+    const trailing = useThrottleFn(fn, 10, { leading: false });
+    trailing.call(6);
+    expect(trailing.flush()).toBeUndefined();
+    expect(fn).toHaveBeenLastCalledWith(6);
+    trailing.stop();
+    const leading = useThrottleFn(fn, 10, { trailing: false });
+    leading.call(7);
+    leading.call(8);
+    vi.runAllTimers();
+    expect(fn).toHaveBeenLastCalledWith(7);
+    leading.stop();
+  });
+  it('preserves ref and getter tracking with scoped filters', () => {
+    vi.useFakeTimers();
+    const scope = effectScope();
+    const input = ref(1);
+    const [debounced, throttled] = scope.run(
+      () => [useDebounce(() => input.value * 2, 20), useThrottle(input, 20)] as const,
+    )!;
+    input.value = 2;
+    input.value = 3;
+    expect(throttled.value.value).toBe(2);
+    vi.advanceTimersByTime(20);
+    expect(debounced.value.value).toBe(6);
+    expect(throttled.value.value).toBe(3);
+    input.value = 4;
+    scope.stop();
+    vi.runAllTimers();
+    input.value = 5;
+    expect(debounced.value.value).toBe(6);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe('history', () => {
+  it('bounds snapshots, branches redo, clones on record and restore', () => {
+    const source = shallowRef({ count: 0 });
+    const h = useRefHistory(source, { clone: (v) => ({ ...v }), capacity: 3 });
+    source.value = { count: 1 };
+    source.value = { count: 2 };
+    source.value = { count: 3 };
+    expect(h.history.value.map((v) => v.count)).toEqual([1, 2, 3]);
+    h.undo();
+    expect(source.value.count).toBe(2);
+    expect(h.canRedo.value).toBe(true);
+    source.value.count = 22;
+    expect(h.history.value[1].count).toBe(2);
+    h.redo();
+    expect(source.value.count).toBe(3);
+    h.undo();
+    source.value = { count: 4 };
+    expect(h.canRedo.value).toBe(false);
+    h.pause();
+    source.value = { count: 5 };
+    expect(h.history.value.at(-1)?.count).toBe(4);
+    h.resume();
+    h.commit();
+    expect(h.history.value.at(-1)?.count).toBe(5);
+    h.clear();
+    h.undo();
+    h.redo();
+    expect(h.canUndo.value).toBe(false);
+    h.stop();
+    source.value = { count: 6 };
+    h.commit();
+    h.clear();
+    h.resume();
+    expect(h.history.value[0].count).toBe(5);
+  });
+  it('supports explicit deep snapshots and rejects readonly or invalid capacity', () => {
+    const source = ref({ a: 1 });
+    const h = useRefHistory(source, { clone: (v) => ({ ...v }), deep: true });
+    source.value.a++;
+    h.undo();
+    expect(source.value.a).toBe(1);
+    h.stop();
+    expect(() => useRefHistory(ref(0), { clone: (v) => v, capacity: 0 })).toThrow(RangeError);
+    // Runtime protection for untyped consumers.
+    expect(() =>
+      Reflect.apply(useRefHistory, undefined, [computed(() => 1), { clone: (v: number) => v }]),
+    ).toThrow(TypeError);
+  });
+});
+it('does not deliver removed bus listeners during an emission or include newly added ones', () => {
+  const bus = useEventBus<number>();
+  const first = vi.fn();
+  const second = vi.fn();
+  let off = () => {};
+  bus.on(() => {
+    off();
+    bus.on(first);
+  });
+  off = bus.on(second);
+  bus.emit(1);
+  expect(second).not.toHaveBeenCalled();
+  expect(first).not.toHaveBeenCalled();
+  bus.emit(2);
+  expect(first).toHaveBeenCalledExactlyOnceWith(2);
+  bus.stop();
+});
+it('ends an idle throttle window without a duplicate leading call', () => {
+  vi.useFakeTimers();
+  const fn = vi.fn();
+  const throttle = useThrottleFn(fn);
+  throttle.call();
+  vi.runAllTimers();
+  expect(fn).toHaveBeenCalledTimes(1);
+  throttle.stop();
+});
