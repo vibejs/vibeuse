@@ -1,6 +1,6 @@
 # VibeUse delivery report
 
-Completed locally on 2026-10-26. All 42 requested functions are implemented, typed, tested and demonstrated. No placeholder exports remain. No packages were published, remotes created, commits pushed or services deployed.
+Implementation completed on 2026-10-26. All 42 requested functions are implemented, typed, tested and demonstrated. No placeholder exports remain. A subsequent user request authorized creating the public GitHub repository vibejs/vibeuse and pushing main. No npm packages were published or services deployed.
 
 ## Repository structure
 
@@ -132,9 +132,9 @@ Vibecn integration is documented as an optional UI composition. No Vibecn compon
 
 | Commit | Content |
 | --- | --- |
-| 75aa817 | Package/tooling scaffold |
-| 94b94e3 | All 42 composables and runtime/type tests |
-| 827c695 | Documentation, real demos, benchmarks and package/browser verification |
-| b67a413 | Completed feature branch merged into main |
+| ce2b72c | Package/tooling scaffold |
+| ec6d5ed | All 42 composables and runtime/type tests |
+| cc467e1 | Documentation, real demos, benchmarks and package/browser verification |
+| e8a9d92 | Completed feature branch merged into main |
 
-This delivery report is committed separately and merged locally into main. The final main hash is supplied in the delivery response. No remotes are configured.
+This delivery report was committed separately and merged into main. Commit email metadata was changed to the author’s GitHub noreply address before publication to preserve email privacy; code and commit messages were preserved. The origin remote is https://github.com/vibejs/vibeuse.git. The final main hash is supplied in the delivery response.
