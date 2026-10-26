@@ -35,7 +35,7 @@ Readonly pressed; stop().
 
 ## Browser compatibility and limitations
 
-Editable fields are ignored by default. Global keyup, Meta release, blur and hidden documents clear pressed state. It observes keys without suppressing native shortcuts.
+Editable fields are ignored by default. A matching keydown records its physical code, so release still clears state if modifiers change the character. Global keyup, Meta release, blur and hidden documents clear pressed state. It observes keys without suppressing native shortcuts.
 
 ## Cleanup
 

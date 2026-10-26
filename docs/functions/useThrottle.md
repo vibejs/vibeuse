@@ -39,7 +39,7 @@ Readonly value, isPending; flush(), cancel(), stop().
 
 ## Browser compatibility and limitations
 
-Each window starts with a call. A trailing value is delivered only if another change arrived.
+Automatic updates remain at least one delay apart, including after a trailing update. A trailing value is delivered only if another change arrived. flush() bypasses the cooldown explicitly.
 
 ## Cleanup
 

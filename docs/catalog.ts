@@ -42,7 +42,7 @@ export const functions: FunctionDoc[] = [
     `const input = ref('');\nconst { value, stop } = useThrottle(() => input.value, 500);`,
     'leading and trailing both default to true. Reactive delay is read at the start of each window.',
     'Readonly value, isPending; flush(), cancel(), stop().',
-    'Each window starts with a call. A trailing value is delivered only if another change arrived.',
+    'Automatic updates remain at least one delay apart, including after a trailing update. A trailing value is delivered only if another change arrived. flush() bypasses the cooldown explicitly.',
   ),
   doc(
     'useThrottleFn',
@@ -51,7 +51,7 @@ export const functions: FunctionDoc[] = [
     `const update = useThrottleFn((x: number) => x * 2, 100);\nupdate.call(10);\nupdate.call(20);`,
     'leading and trailing default to true; delay accepts a value, ref or getter.',
     'call(...args), flush(), cancel(), stop(); readonly isPending.',
-    'No polling and no promise queue. Cancellation drops the pending trailing arguments.',
+    'Automatic calls remain at least one delay apart, including after a trailing call. isPending includes the cooldown; flush() bypasses it explicitly. Cancellation drops pending arguments. No polling or promise queue.',
   ),
   doc(
     'usePrevious',
@@ -316,7 +316,7 @@ export const functions: FunctionDoc[] = [
     `const { pressed, stop } = useKeyPressed('KeyK');`,
     'Match KeyboardEvent.key or code. Optional target, window and includeInputs (false).',
     'Readonly pressed; stop().',
-    'Editable fields are ignored by default. Global keyup, Meta release, blur and hidden documents clear pressed state. It observes keys without suppressing native shortcuts.',
+    'Editable fields are ignored by default. A matching keydown records its physical code, so release still clears state if modifiers change the character. Global keyup, Meta release, blur and hidden documents clear pressed state. It observes keys without suppressing native shortcuts.',
   ),
   doc(
     'useDevicePixelRatio',

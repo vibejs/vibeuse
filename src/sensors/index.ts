@@ -73,17 +73,27 @@ export function useKeyPressed(key: string, options: KeyOptions = {}) {
     const pressed = shallowRef(false);
     const win = options.window ?? defaultWindow();
     const target = options.target ?? win;
+    let pressedCode: string | undefined;
     const reset = () => {
+      pressedCode = undefined;
       pressed.value = false;
     };
     useEventListener(target, 'keydown', (event) => {
       const e = event as KeyboardEvent;
-      if ((options.includeInputs || !editable(e)) && (e.key === key || e.code === key))
+      if ((options.includeInputs || !editable(e)) && (e.key === key || e.code === key)) {
+        pressedCode = e.code;
         pressed.value = true;
+      }
     });
     // Release is global even for element targets: focus can move while a key is held.
     useEventListener(win, 'keyup', (event) => {
-      if (event.key === key || event.code === key || event.key === 'Meta') reset();
+      if (
+        event.key === key ||
+        event.code === key ||
+        event.key === 'Meta' ||
+        (pressedCode && event.code === pressedCode)
+      )
+        reset();
     });
     useEventListener(win, 'blur', reset);
     if (win)

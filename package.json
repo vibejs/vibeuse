@@ -69,7 +69,7 @@
     "build": "tsdown && vite build examples/playground && node scripts/site-notices.ts",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.tools.json --noEmit && pnpm --dir examples/playground exec tsc -b --runExternalCode && node scripts/check-docs.ts",
     "lint": "oxlint --deny-warnings",
-    "fmt": "oxfmt src test scripts benchmarks examples docs/catalog.ts *.ts *.json .changeset",
+    "fmt": "oxfmt src test scripts benchmarks examples docs/catalog.ts *.ts *.json .changeset .github",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:browser": "node scripts/browser.ts",
@@ -80,7 +80,7 @@
     "test:integration": "pnpm test:browser && pnpm test:package",
     "precheck": "pnpm build:library",
     "build:library": "tsdown",
-    "fmt:check": "oxfmt --check src test scripts benchmarks examples docs/catalog.ts *.ts *.json .changeset"
+    "fmt:check": "oxfmt --check src test scripts benchmarks examples docs/catalog.ts *.ts *.json .changeset .github"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",

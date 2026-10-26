@@ -201,6 +201,12 @@ try {
   await page.keyboard.up('k');
   assert.equal((await read()).pressed, false);
   checks.push('keyboard release');
+  await page.keyboard.down('k');
+  await page.keyboard.down('Shift');
+  await page.keyboard.up('k');
+  assert.equal((await read()).pressed, false);
+  await page.keyboard.up('Shift');
+  checks.push('keyboard release after modifier changes');
   await route('useIntervalFn');
   await until(async () => (await read()).ticks >= 1, 'interval');
   await page.getByRole('button', { name: 'Pause', exact: true }).click();

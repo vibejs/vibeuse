@@ -1,6 +1,6 @@
 # VibeUse delivery report
 
-Implementation completed on 2026-10-26. All 42 requested functions are implemented, typed, tested and demonstrated. No placeholder exports remain. A subsequent user request authorized creating the public GitHub repository vibejs/vibeuse and pushing main. No npm packages were published or services deployed.
+Implementation and completion audit finished on 2026-10-26. All 42 requested functions are implemented, typed, tested and demonstrated. No placeholder exports remain. The audit corrected throttle cooldowns after trailing calls and physical key release when modifiers change, with regression tests. A subsequent user request authorized creating the public GitHub repository vibejs/vibeuse and pushing main. No npm packages were published or services deployed.
 
 ## Repository structure
 
@@ -22,6 +22,7 @@ vibeuse/
   scripts/            Documentation, browser, package and release verification
   benchmarks/         Reproducible diagnostic workloads
   .changeset/         Independent release configuration and initial changeset
+  .github/workflows/ci.yml  Automated full verification and report artifacts
 ```
 
 ## Implemented collection
@@ -66,17 +67,19 @@ No runtime source imports ui/internal, ui/tooling, compiler internals or another
 | pnpm install --frozen-lockfile | Passed |
 | pnpm typecheck | Strict library, scripts, benchmarks, .vibe templates and documentation checks passed |
 | pnpm lint / pnpm fmt:check | Passed without warnings |
-| pnpm test / test:coverage | 70 tests across 8 files passed |
+| pnpm test / test:coverage | 73 tests across 8 files passed |
 | Runtime coverage | Statements 100%, branches 100%, functions 100%, lines 100% |
 | Coverage enforcement | 100% per file, no coverage ignores |
 | pnpm build | Library declarations, source maps and production site passed; no tracked build diff |
-| pnpm test:browser | 21 browser check groups passed in Chromium 156.0.8078.4; no page errors |
+| pnpm test:browser | 22 browser check groups passed in Chromium 156.0.8078.4; no page errors |
 | pnpm test:package | Offline tarball install, every export, strict external types, tree shaking passed |
 | pnpm check | Complete gate passed |
-| Neighboring Vibe.js runtime | All 70 tests passed |
+| Neighboring Vibe.js runtime | All 73 tests passed |
 | pnpm peers check | No peer dependency issues |
 
-Coverage counts: 819/819 statements, 522/522 branches, 242/242 functions, 713/713 lines. Four barrel-only files contain no executable behavior.
+Coverage counts: 825/825 statements, 526/526 branches, 243/243 functions, 721/721 lines. Four barrel-only files contain no executable behavior.
+
+The CI workflow runs the same complete gate on main pushes and pull requests, using Node 24, locked pnpm dependencies and Chromium on Ubuntu. Action revisions are pinned, repository permissions are read-only and verification reports are uploaded as artifacts. CI has no publishing or deployment steps.
 
 Browser checks cover all 42 demos, clipboard writes, responsive media/window state, local-storage reload persistence, element resizing, intersections, two-axis scrolling, focus, outside pointers, mouse coordinates, keyboard release and timer controls. Instrumented native resources show no growth after 18 route teardown cycles. Two independent applications pass 30 app teardown cycles with zero remaining global listeners, observers or intervals. Unit tests additionally exercise unavailable APIs, rejected async operations, corrupted/quota-denied storage, explicit scopes, late targets, replacement and stale callbacks.
 
@@ -86,17 +89,17 @@ Reports: [coverage](coverage/coverage-summary.json), [browser](artifacts/browser
 
 | Artifact | Bytes | Gzip bytes |
 | --- | ---: | ---: |
-| useCounter, root import, minified ESM with peer external | 948 | 460 |
-| All 42 composables, minified ESM with peer external | 24557 | 6722 |
-| Packed npm tarball, including declarations and maps | 33939 | — |
-| All emitted library JS files, before consumer minification | 38387 | — |
+| useCounter, root import, minified ESM with peer external | 948 | 459 |
+| All 42 composables, minified ESM with peer external | 24652 | 6771 |
+| Packed npm tarball, including declarations and maps | 34401 | — |
+| All emitted library JS files, before consumer minification | 38615 | — |
 
 Root and category useCounter builds produce identical code. Unrelated clipboard, storage and observer code is absent from the single-function bundle. The framework remains external; the consumer resolves its own peer runtime.
 
 The production documentation assets are separate from library measurements:
 
 - integration-BNIlX33Y.js: 1754 bytes
-- main-Bm4DYoeC.js: 175603 bytes
+- main-Bep0GJnT.js: 176342 bytes
 - main-C3W5xGQz.css: 9764 bytes
 - timers-DBfYKC3p.js: 37249 bytes
 
@@ -104,9 +107,9 @@ Benchmarks used v24.22.1 on darwin/arm64, three warmup runs and one measured run
 
 | Workload | Iterations | Measured duration |
 | --- | ---: | ---: |
-| synchronous updates with previous-value tracking | 100000 | 8.575 ms |
-| native EventTarget event delivery | 100000 | 1.647 ms |
-| scope creation/disposal with listener and bounded history | 10000 | 10.319 ms |
+| synchronous updates with previous-value tracking | 100000 | 8.773 ms |
+| native EventTarget event delivery | 100000 | 1.629 ms |
+| scope creation/disposal with listener and bounded history | 10000 | 10.562 ms |
 
 ## Examples and documentation
 

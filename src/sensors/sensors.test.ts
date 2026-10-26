@@ -183,3 +183,11 @@ it('recognizes plaintext and mixed-case editable contexts while honoring explici
   expect(key.pressed.value).toBe(true);
   key.stop();
 });
+it('releases a matched character when modifiers change its key value before keyup', () => {
+  const key = useKeyPressed('k');
+  window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', code: 'KeyK' }));
+  expect(key.pressed.value).toBe(true);
+  window.dispatchEvent(new KeyboardEvent('keyup', { key: 'K', code: 'KeyK', shiftKey: true }));
+  expect(key.pressed.value).toBe(false);
+  key.stop();
+});
