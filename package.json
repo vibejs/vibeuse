@@ -1,7 +1,7 @@
 {
   "name": "@usevibejs/use",
   "version": "0.1.0",
-  "description": "Essential Composables for Vibe.js",
+  "description": "Essential composables for Vibe.js.",
   "keywords": [
     "composables",
     "reactivity",
@@ -64,6 +64,9 @@
       "default": "./dist/timers.js"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite examples/playground --host 127.0.0.1",
     "build": "tsdown && vite build examples/playground && node scripts/site-notices.ts",
@@ -80,7 +83,8 @@
     "test:integration": "pnpm test:browser && pnpm test:package",
     "precheck": "pnpm build:library",
     "build:library": "tsdown",
-    "fmt:check": "oxfmt --check src test scripts benchmarks examples docs/catalog.ts *.ts *.json .changeset .github"
+    "fmt:check": "oxfmt --check src test scripts benchmarks examples docs/catalog.ts *.ts *.json .changeset .github",
+    "version-packages": "changeset version && pnpm install --lockfile-only"
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
