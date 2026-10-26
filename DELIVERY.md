@@ -79,7 +79,7 @@ No runtime source imports ui/internal, ui/tooling, compiler internals or another
 
 Coverage counts: 825/825 statements, 526/526 branches, 243/243 functions, 721/721 lines. Four barrel-only files contain no executable behavior.
 
-The CI workflow runs the same complete gate on main pushes and pull requests, using Node 24, locked pnpm dependencies and Chromium on Ubuntu. Action revisions are pinned, repository permissions are read-only and verification reports are uploaded as artifacts. CI has no publishing or deployment steps.
+The CI workflow runs the same complete gate on main pushes and pull requests, using Node 24, locked pnpm dependencies and Chromium on Ubuntu 24.04. The runner image is pinned to avoid implicit OS upgrades. Action revisions are pinned, repository permissions are read-only and verification reports are uploaded as artifacts. CI has no publishing or deployment steps.
 
 Browser checks cover all 42 demos, clipboard writes, responsive media/window state, local-storage reload persistence, element resizing, intersections, two-axis scrolling, focus, outside pointers, mouse coordinates, keyboard release and timer controls. Instrumented native resources show no growth after 18 route teardown cycles. Two independent applications pass 30 app teardown cycles with zero remaining global listeners, observers or intervals. Unit tests additionally exercise unavailable APIs, rejected async operations, corrupted/quota-denied storage, explicit scopes, late targets, replacement and stale callbacks.
 
@@ -89,9 +89,9 @@ Reports: [coverage](coverage/coverage-summary.json), [browser](artifacts/browser
 
 | Artifact | Bytes | Gzip bytes |
 | --- | ---: | ---: |
-| useCounter, root import, minified ESM with peer external | 948 | 460 |
-| All 42 composables, minified ESM with peer external | 24652 | 6772 |
-| Packed npm tarball, including declarations and maps | 34508 | — |
+| useCounter, root import, minified ESM with peer external | 948 | 458 |
+| All 42 composables, minified ESM with peer external | 24652 | 6771 |
+| Packed npm tarball, including declarations and maps | 34520 | — |
 | All emitted library JS files, before consumer minification | 38615 | — |
 
 Root and category useCounter builds produce identical code. Unrelated clipboard, storage and observer code is absent from the single-function bundle. The framework remains external; the consumer resolves its own peer runtime.
