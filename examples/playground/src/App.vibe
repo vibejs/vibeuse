@@ -49,16 +49,16 @@ const groupPath = (group: string) => group === 'Getting started' ? 'getting-star
           <p v-if="!matching.length" class="muted">No composables match.</p>
         </div>
       </nav>
-      <div class="sidebar-footer">Built for Vibe.js <span>Native to the core.</span></div>
+      <div class="sidebar-footer">Built for vibe.js <span>Native to the core.</span></div>
     </aside>
     <main id="main" tabindex="-1" class="content">
       <div v-if="page === 'getting-started/introduction'" class="intro-hero">
-        <div class="eyebrow"><span class="status-dot" /> The native Vibe.js toolkit</div>
+        <div class="eyebrow"><span class="status-dot" /> The native vibe.js toolkit</div>
         <h1>Useful by nature.<br /><span>Reactive by Vibe.</span></h1>
-        <p class="lede">Essential Composables for Vibe.js. Small, typed building blocks for the browser, your state, and everything in between.</p>
+        <p class="lede">Essential Composables for vibe.js. Small, typed building blocks for the browser, your state, and everything in between.</p>
         <div class="install-command"><code>pnpm add @usevibejs/use</code><button type="button" @click="clipboard.copy('pnpm add @usevibejs/use')" :aria-label="copied ? 'Command copied' : 'Copy install command'">{{ copied ? 'Copied' : 'Copy' }}</button></div>
         <div class="hero-links"><a class="primary-link" href="#/getting-started/quick-start">Start building →</a><a href="#/functions/useDebounce">Explore the composables ↗</a></div>
-        <div class="principles"><div><strong>42 focused functions</strong><span>One package. Six categories.</span></div><div><strong>Vibe.js all the way down</strong><span>One reactive runtime.</span></div><div><strong>A clear end to every effect</strong><span>Automatic scope cleanup.</span></div></div>
+        <div class="principles"><div><strong>42 focused functions</strong><span>One package. Six categories.</span></div><div><strong>vibe.js all the way down</strong><span>One reactive runtime.</span></div><div><strong>A clear end to every effect</strong><span>Automatic scope cleanup.</span></div></div>
         <div class="section-heading"><div><span class="eyebrow">Try it now</span><h2>A little state. A useful history.</h2></div><a href="#/functions/useRefHistory">View API →</a></div>
         <Demo name="useRefHistory" />
       </div>

@@ -1,6 +1,6 @@
 # Native runtime, ownership, and distribution
 
-VibeUse consumes `@usevibejs/ui` 0.1.x through its public entry point. Inspection of Vibe.js's contracts, decision records, ref/computed/reactive implementations, runtime watchers, lifecycle hooks, effect scopes, injection, scheduler, component/tooling types, compiler and testing APIs established these constraints:
+VibeUse consumes `@usevibejs/ui` 0.1.x through its public entry point. Inspection of vibe.js's contracts, decision records, ref/computed/reactive implementations, runtime watchers, lifecycle hooks, effect scopes, injection, scheduler, component/tooling types, compiler and testing APIs established these constraints:
 
 - `MaybeRefOrGetter` is the framework's input type. `toValue` invokes a getter; arbitrary callbacks remain callbacks.
 - Watchers default to the pre queue. History and filters use sync watchers to observe individual writes. DOM target initialization uses the post queue, and explicit event subscriptions switch synchronously.

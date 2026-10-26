@@ -1,6 +1,6 @@
 # Quick Start
 
-Use composables inside a genuine Vibe.js component. Setup runs within the component effect scope; unmount stops the debounce watcher and pending timeout.
+Use composables inside a genuine vibe.js component. Setup runs within the component effect scope; unmount stops the debounce watcher and pending timeout.
 
 ```vibe
 <script setup lang="ts">
