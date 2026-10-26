@@ -25,7 +25,13 @@ try {
       },
     }),
   );
-  execFileSync('pnpm', ['install', '--offline', '--ignore-scripts'], {
+  // A frozen workspace installation need not populate registry metadata. Resolve exact consumer
+  // versions once, then prove the artifact installs from the locked store without network access.
+  execFileSync('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], {
+    cwd: consumer,
+    stdio: 'pipe',
+  });
+  execFileSync('pnpm', ['install', '--offline', '--frozen-lockfile', '--ignore-scripts'], {
     cwd: consumer,
     stdio: 'pipe',
   });
@@ -110,7 +116,7 @@ try {
   );
   const report = {
     exports: exported,
-    consumerInstall: 'passed (offline packed artifact)',
+    consumerInstall: 'passed (frozen offline packed artifact after consumer lockfile resolution)',
     consumerTypes: 'passed (NodeNext, strict, skipLibCheck false)',
     peerExternal: true,
     runtimeDependencies: 0,

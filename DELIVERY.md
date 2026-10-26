@@ -50,7 +50,7 @@ Package: @usevibejs/use, version 0.1.0, MIT, ESM, sideEffects false. Required pe
 - @usevibejs/use/sensors
 - @usevibejs/use/timers
 
-Every entry was imported from a packed tarball installed into a separate consumer. Strict NodeNext type checking passed with skipLibCheck false. No local filesystem dependencies are published.
+Every entry was imported from a packed tarball installed into a separate consumer. Exact consumer dependencies are resolved into a lockfile first; the subsequent installation uses frozen offline mode. This also works on fresh runners without preexisting registry metadata. Strict NodeNext type checking passed with skipLibCheck false. No local filesystem dependencies are published.
 
 ## Reactive architecture and ownership
 
@@ -89,9 +89,9 @@ Reports: [coverage](coverage/coverage-summary.json), [browser](artifacts/browser
 
 | Artifact | Bytes | Gzip bytes |
 | --- | ---: | ---: |
-| useCounter, root import, minified ESM with peer external | 948 | 459 |
-| All 42 composables, minified ESM with peer external | 24652 | 6771 |
-| Packed npm tarball, including declarations and maps | 34401 | — |
+| useCounter, root import, minified ESM with peer external | 948 | 460 |
+| All 42 composables, minified ESM with peer external | 24652 | 6772 |
+| Packed npm tarball, including declarations and maps | 34447 | — |
 | All emitted library JS files, before consumer minification | 38615 | — |
 
 Root and category useCounter builds produce identical code. Unrelated clipboard, storage and observer code is absent from the single-function bundle. The framework remains external; the consumer resolves its own peer runtime.

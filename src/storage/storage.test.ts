@@ -132,21 +132,21 @@ it('isolates applications and releases scoped subscriptions', () => {
   expect(localStorage.getItem('one')).toBe('"aa"');
 });
 it('handles unavailable storage access and session storage denial', () => {
-  const denied = {
-    get localStorage(): Storage {
+  const denied = Object.defineProperty(new EventTarget(), 'localStorage', {
+    get(): Storage {
       throw new Error('denied');
     },
-  } as Window;
+  }) as Window;
   const s = useStorage('denied', 1, { window: denied });
   expect(s.isSupported).toBe(false);
   expect(s.error.value).toBeInstanceOf(Error);
   s.stop();
   const session = useSessionStorage('denied', 1, {
-    window: {
-      get sessionStorage(): Storage {
+    window: Object.defineProperty(new EventTarget(), 'sessionStorage', {
+      get(): Storage {
         throw new Error('denied');
       },
-    } as Window,
+    }) as Window,
   });
   expect(session.error.value).toBeInstanceOf(Error);
   session.stop();
