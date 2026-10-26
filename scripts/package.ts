@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { build } from 'vite';
 const root = process.cwd();
@@ -12,6 +12,11 @@ try {
   const tar = readdirSync(temp).find((name) => name.endsWith('.tgz'))!;
   mkdirSync(join(temp, 'consumer'));
   const consumer = join(temp, 'consumer');
+  const workspaceStore = execFileSync('pnpm', ['store', 'path', '--silent'], {
+    cwd: root,
+    encoding: 'utf8',
+  }).trim();
+  const store = dirname(workspaceStore);
   writeFileSync(
     join(consumer, 'package.json'),
     JSON.stringify({
@@ -25,16 +30,28 @@ try {
       },
     }),
   );
-  // A frozen workspace installation need not populate registry metadata. Resolve exact consumer
-  // versions once, then prove the artifact installs from the locked store without network access.
-  execFileSync('pnpm', ['install', '--lockfile-only', '--ignore-scripts'], {
+  // A temporary consumer can select a different default store from the workspace. Select the
+  // installed workspace's store explicitly, resolve exact metadata, and prefetch before going offline.
+  assert.equal(
+    execFileSync('pnpm', ['store', 'path', '--store-dir', store, '--silent'], {
+      cwd: consumer,
+      encoding: 'utf8',
+    }).trim(),
+    workspaceStore,
+  );
+  execFileSync('pnpm', ['install', '--lockfile-only', '--ignore-scripts', '--store-dir', store], {
     cwd: consumer,
     stdio: 'pipe',
   });
-  execFileSync('pnpm', ['install', '--offline', '--frozen-lockfile', '--ignore-scripts'], {
+  execFileSync('pnpm', ['fetch', '--ignore-scripts', '--store-dir', store], {
     cwd: consumer,
     stdio: 'pipe',
   });
+  execFileSync(
+    'pnpm',
+    ['install', '--offline', '--frozen-lockfile', '--ignore-scripts', '--store-dir', store],
+    { cwd: consumer, stdio: 'pipe' },
+  );
   const manifest = JSON.parse(
     readFileSync(join(consumer, 'node_modules/@usevibejs/use/package.json'), 'utf8'),
   );
@@ -116,7 +133,7 @@ try {
   );
   const report = {
     exports: exported,
-    consumerInstall: 'passed (frozen offline packed artifact after consumer lockfile resolution)',
+    consumerInstall: 'passed (frozen offline packed artifact with explicit prefetched store)',
     consumerTypes: 'passed (NodeNext, strict, skipLibCheck false)',
     peerExternal: true,
     runtimeDependencies: 0,
