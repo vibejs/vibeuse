@@ -3,5 +3,9 @@ dist/
 coverage/
 .tsbuild/
 *.tgz
+.local-packs/
+test-results/
+.vitest/
+.pnpm-store/
 artifacts/
 .DS_Store
