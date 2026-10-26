@@ -32,7 +32,7 @@ declare function useEventBus<T>(): {
 
 ## Options
 
-Specify the event payload type. Share a returned bus explicitly or through Vibe.js provide/inject.
+Specify the event payload type. Share a returned bus explicitly or through vibe.js provide/inject.
 
 ## Return values
 
@@ -44,4 +44,4 @@ There is no global named registry. Listeners added during emission wait until th
 
 ## Cleanup
 
-The calling Vibe.js effect scope owns all watchers and native resources. stop() is idempotent and permanently stops this instance. Outside an active scope, call stop() yourself. No asynchronous result is applied after disposal.
+The calling vibe.js effect scope owns all watchers and native resources. stop() is idempotent and permanently stops this instance. Outside an active scope, call stop() yourself. No asynchronous result is applied after disposal.

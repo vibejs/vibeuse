@@ -1,7 +1,7 @@
 {
   "name": "@usevibejs/use",
   "version": "0.1.0",
-  "description": "Essential composables for Vibe.js.",
+  "description": "Essential composables for vibe.js.",
   "keywords": [
     "composables",
     "reactivity",

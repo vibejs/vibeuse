@@ -1,8 +1,8 @@
 # VibeUse
 
-**Essential composables for Vibe.js.**
+**Essential composables for vibe.js.**
 
-`@usevibejs/use` provides 42 native, typed composables for [Vibe.js](https://vibejs.org): local reactivity, browser APIs, storage, elements, sensors and scheduling. One ESM package, no runtime dependencies, and automatic effect-scope cleanup.
+`@usevibejs/use` provides 42 native, typed composables for [vibe.js](https://vibejs.org): local reactivity, browser APIs, storage, elements, sensors and scheduling. One ESM package, no runtime dependencies, and automatic effect-scope cleanup.
 
 ## Install
 
@@ -45,7 +45,7 @@ Imports are available from the root and `/reactivity`, `/browser`, `/storage`, `
 
 ## Contracts
 
-- Read inputs use Vibe.js `MaybeRefOrGetter`. Plain values, refs, shallow refs, computed refs and getters track through public Vibe.js APIs. Callbacks remain callbacks.
+- Read inputs use vibe.js `MaybeRefOrGetter`. Plain values, refs, shallow refs, computed refs and getters track through public vibe.js APIs. Callbacks remain callbacks.
 - Every resource owner returns a terminal, idempotent `stop()`. An active effect scope owns it automatically. Outside a scope, call `stop()` yourself. Pure state utilities need no cleanup.
 - History requires an explicit `clone` strategy and a writable ref. No implicit JSON cloning.
 - Buses are isolated per call. Share a returned bus explicitly or through public provide/inject.
@@ -90,7 +90,7 @@ Run the full verification with `pnpm check`. Start the documentation site and in
 
 Playwright needs a Chromium installation (`pnpm exec playwright install chromium` if absent). The site runs locally; no deployment is required. It contains a live demo for every function and a separate production component integration fixture. The library build uses stable TypeScript 7.0; `.vibe` template checks use the ecosystem's separate 7.1 content-mapper nightly.
 
-To verify against a neighboring **built** Vibe.js checkout without changing package manifests or lockfiles:
+To verify against a neighboring **built** vibe.js checkout without changing package manifests or lockfiles:
 
 ```sh
 VIBEUSE_UI_SOURCE=../vibejs/packages/ui/dist/index.js pnpm test

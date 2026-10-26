@@ -40,7 +40,7 @@ Permission and support utilities are organized under Browser, making that catego
 
 ## Package and exports
 
-Package: @usevibejs/use, version 0.1.0, MIT, ESM, sideEffects false. Required peer: @usevibejs/ui ^0.1.0. Zero runtime dependencies. Versions are independent from Vibe.js.
+Package: @usevibejs/use, version 0.1.0, MIT, ESM, sideEffects false. Required peer: @usevibejs/ui ^0.1.0. Zero runtime dependencies. Versions are independent from vibe.js.
 
 - @usevibejs/use
 - @usevibejs/use/reactivity
@@ -54,11 +54,11 @@ Every entry was imported from a packed tarball installed into a separate consume
 
 ## Reactive architecture and ownership
 
-Read inputs use Vibe.js public MaybeRefOrGetter and toValue. Watchers and derived state are native Vibe.js APIs. Writable history sources reject readonly refs and computed refs in declaration tests and guard readonly sources at runtime. History requires an explicit clone strategy. Buses are isolated per call and can be shared explicitly.
+Read inputs use vibe.js public MaybeRefOrGetter and toValue. Watchers and derived state are native vibe.js APIs. Writable history sources reject readonly refs and computed refs in declaration tests and guard readonly sources at runtime. History requires an explicit clone strategy. Buses are isolated per call and can be shared explicitly.
 
 Each resource owner creates a native child effectScope. Watchers and nested composables belong to it; onScopeDispose releases native resources. stop() is idempotent and terminal. Outside a scope, callers must retain and call stop(). Pure counter, toggle, cycle and support checks allocate no external resources. Async clipboard/permission results use request generations and disposal guards. Stale observer target callbacks are rejected.
 
-No runtime source imports ui/internal, ui/tooling, compiler internals or another UI framework. Neighboring repositories were inspected without modification. Vitest additionally passed against the neighboring Vibe.js built public runtime using the documented environment override.
+No runtime source imports ui/internal, ui/tooling, compiler internals or another UI framework. Neighboring repositories were inspected without modification. Vitest additionally passed against the neighboring vibe.js built public runtime using the documented environment override.
 
 ## Actual verification results
 
@@ -74,7 +74,7 @@ No runtime source imports ui/internal, ui/tooling, compiler internals or another
 | pnpm test:browser | 22 browser check groups passed in Chromium 156.0.8078.4; no page errors |
 | pnpm test:package | Offline tarball install, every export, strict external types, tree shaking passed |
 | pnpm check | Complete gate passed |
-| Neighboring Vibe.js runtime | All 73 tests passed |
+| Neighboring vibe.js runtime | All 73 tests passed |
 | pnpm peers check | No peer dependency issues |
 
 Coverage counts: 825/825 statements, 526/526 branches, 243/243 functions, 721/721 lines. Four barrel-only files contain no executable behavior.

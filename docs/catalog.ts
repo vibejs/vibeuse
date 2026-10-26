@@ -94,7 +94,7 @@ export const functions: FunctionDoc[] = [
     'Reactivity',
     'Create an isolated typed event bus for explicit sharing.',
     `const bus = useEventBus<{ id: string }>();\nconst off = bus.on(event => console.log(event.id));\nbus.emit({ id: 'saved' });\noff();`,
-    'Specify the event payload type. Share a returned bus explicitly or through Vibe.js provide/inject.',
+    'Specify the event payload type. Share a returned bus explicitly or through vibe.js provide/inject.',
     'on(listener) returns off(); emit(event), clear(), stop().',
     'There is no global named registry. Listeners added during emission wait until the next emission. Each subscription is cleaned up with its subscribing scope.',
   ),
