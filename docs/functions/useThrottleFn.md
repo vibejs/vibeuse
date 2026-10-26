@@ -40,7 +40,7 @@ call(...args), flush(), cancel(), stop(); readonly isPending.
 
 ## Browser compatibility and limitations
 
-No polling and no promise queue. Cancellation drops the pending trailing arguments.
+Automatic calls remain at least one delay apart, including after a trailing call. isPending includes the cooldown; flush() bypasses it explicitly. Cancellation drops pending arguments. No polling or promise queue.
 
 ## Cleanup
 

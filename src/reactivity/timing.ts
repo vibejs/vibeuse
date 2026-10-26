@@ -94,18 +94,25 @@ export function useThrottleFn<A extends unknown[], R>(
       args = pending;
       return invoke();
     };
+    const schedule = () => {
+      timer = setTimeout(
+        () => {
+          timer = undefined;
+          if (options.trailing !== false && args) {
+            // A trailing invocation starts its own cooldown. Reentrant calls must see it too.
+            schedule();
+            invoke();
+          } else cancel();
+        },
+        delay(toValue(ms)),
+      );
+    };
     const call = (...next: A): void => {
       if (!alive()) return;
       args = next;
       if (timer !== undefined) return;
       isPending.value = true;
-      timer = setTimeout(
-        () => {
-          if (options.trailing !== false) flush();
-          else cancel();
-        },
-        delay(toValue(ms)),
-      );
+      schedule();
       if (options.leading !== false) invoke();
     };
     cleanup(cancel);
