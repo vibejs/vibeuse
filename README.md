@@ -85,7 +85,7 @@ Normal development resolves the published `@usevibejs/ui@0.1.0`. The local overr
 
 `pnpm docs:generate` rebuilds public declarations, reference signatures and typed example fixtures. `pnpm typecheck` checks for sample drift and compiles guide `.vibe` snippets. `pnpm test:package` resolves a separate consumer lockfile and prefetches its exact dependencies using an explicitly selected pnpm store, installs the packed artifact in frozen offline mode, verifies all exports, checks strict NodeNext consumer types and measures actual production tree shaking with the peer external. Resolution and prefetch need registry access; the subsequent installation is offline. The consumer has its own manifest, lockfile and node_modules outside the workspace. `pnpm bench` records repeatable workloads with their environment. Reports and screenshots are written under `artifacts/`; coverage is under `coverage/`.
 
-[GitHub CI](https://github.com/vibejs/vibeuse/actions/workflows/ci.yml) runs the complete gate on main pushes and pull requests using Node 24 and the pinned pnpm version. It installs Chromium, validates the packed consumer and uploads coverage, browser, bundle and benchmark reports. The workflow does not publish packages or deploy the documentation.
+[GitHub CI](https://github.com/vibejs/vibeuse/actions/workflows/ci.yml) runs the complete gate on main pushes and pull requests using Ubuntu 24.04, Node 24 and the pinned pnpm version. It installs Chromium, validates the packed consumer and uploads coverage, browser, bundle and benchmark reports. The workflow does not publish packages or deploy the documentation.
 
 ## Boundaries and limitations
 
