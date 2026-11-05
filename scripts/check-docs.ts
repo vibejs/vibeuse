@@ -3,8 +3,8 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { compile } from '@usevibejs/compiler';
 import { functions } from '../docs/catalog.ts';
 import { declarations, signature, typeExamples } from './doc-source.ts';
-assert.equal(functions.length, 42);
-assert.equal(new Set(functions.map((fn) => fn.name)).size, 42);
+assert.equal(functions.length, 45);
+assert.equal(new Set(functions.map((fn) => fn.name)).size, 45);
 const runtime = await import('../dist/index.js');
 assert.deepEqual(
   Object.keys(runtime)
@@ -38,7 +38,7 @@ for (const group of ['getting-started', 'guide', 'advanced', 'functions']) {
   }
 }
 console.log(
-  `Verified 42 function pages, 42 typed samples, 42 live demos and ${sfcCount} guide component.`,
+  `Verified 45 function pages, 45 typed samples, 45 live demos and ${sfcCount} guide component.`,
 );
 
 for (const file of readdirSync('examples/playground/src').filter((file) =>

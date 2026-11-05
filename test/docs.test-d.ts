@@ -14,6 +14,7 @@ import {
   useEventListener,
   useWindowSize,
   useMediaQuery,
+  useBreakpoints,
   usePreferredDark,
   useDark,
   useDocumentVisibility,
@@ -30,6 +31,7 @@ import {
   useResizeObserver,
   useMutationObserver,
   useScroll,
+  useInfiniteScroll,
   useFocus,
   useClickOutside,
   useMouse,
@@ -37,6 +39,7 @@ import {
   useKeyModifier,
   useKeyPressed,
   useDevicePixelRatio,
+  useGeolocation,
   useIntervalFn,
   useTimeoutFn,
   useRafFn,
@@ -129,6 +132,12 @@ function useMediaQueryExample() {
   return { matches, isSupported, stop };
 }
 void useMediaQueryExample;
+function useBreakpointsExample() {
+  const viewport = useBreakpoints({ sm: 640, md: 768, lg: 1024 });
+  const compact = viewport.smaller('md');
+  return { viewport, compact };
+}
+void useBreakpointsExample;
 function usePreferredDarkExample() {
   const { matches, stop } = usePreferredDark();
   return { matches, stop };
@@ -235,6 +244,12 @@ function useScrollExample() {
   return { element, scroll };
 }
 void useScrollExample;
+function useInfiniteScrollExample() {
+  const list = shallowRef<HTMLElement | null>(null);
+  const feed = useInfiniteScroll(list, () => {}, { distance: 80 });
+  return { list, feed };
+}
+void useInfiniteScrollExample;
 function useFocusExample() {
   const element = shallowRef<HTMLInputElement | null>(null);
   const focus = useFocus(element);
@@ -274,6 +289,12 @@ function useDevicePixelRatioExample() {
   return { pixelRatio, stop };
 }
 void useDevicePixelRatioExample;
+function useGeolocationExample() {
+  const location = useGeolocation({ immediate: false });
+  location.resume();
+  return { location };
+}
+void useGeolocationExample;
 function useIntervalFnExample() {
   const delay = ref(1000);
   const timer = useIntervalFn(() => console.log('tick'), delay, { immediate: false });

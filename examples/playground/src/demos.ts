@@ -149,6 +149,18 @@ export function createDemo(
         'Resize across 900px to inspect this breakpoint.',
       );
     }
+    case 'useBreakpoints': {
+      const d = use.useBreakpoints({ sm: 640, md: 900, lg: 1200 });
+      return state(
+        () => ({
+          current: d.current.value ?? null,
+          active: d.active.value,
+          compact: d.smaller('md'),
+        }),
+        [],
+        'Resize the window. Names are min-width breakpoints in CSS pixels.',
+      );
+    }
     case 'usePreferredDark': {
       const d = use.usePreferredDark();
       return state(
@@ -346,6 +358,24 @@ export function createDemo(
         surface: 'scroll',
       };
     }
+    case 'useInfiniteScroll': {
+      const pages = ref(1);
+      const d = use.useInfiniteScroll(
+        target,
+        () => {
+          pages.value += 1;
+        },
+        { distance: 24 },
+      );
+      return {
+        ...state(
+          () => ({ pages: pages.value, loading: d.isLoading.value }),
+          [action('Check', d.check)],
+          'Scroll the surface to its end to load another page.',
+        ),
+        surface: 'scroll',
+      };
+    }
     case 'useFocus': {
       const d = use.useFocus(field);
       return {
@@ -425,6 +455,18 @@ export function createDemo(
         () => ({ pixelRatio: d.pixelRatio.value }),
         [],
         'Change browser zoom or move this window between displays.',
+      );
+    }
+    case 'useGeolocation': {
+      const d = use.useGeolocation({ immediate: false });
+      return state(
+        () => ({
+          supported: d.isSupported,
+          latitude: d.coords.value?.latitude ?? null,
+          error: d.error.value ? d.error.value.message : null,
+        }),
+        [action('Watch location', d.resume), action('Pause', d.pause)],
+        'Watch starts only when you ask. The browser may prompt for location.',
       );
     }
     case 'useIntervalFn': {

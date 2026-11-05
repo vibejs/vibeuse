@@ -68,7 +68,7 @@ try {
   );
   writeFileSync(
     join(consumer, 'check.mjs'),
-    `import assert from 'node:assert/strict';\n${exported.map((entry, i) => `const m${i} = await import('${entry}'); assert(Object.keys(m${i}).length > 0);`).join('\n')}\nassert.equal(Object.keys(m0).length, 42); const c = m0.useCounter(); c.inc(); assert.equal(c.count.value, 1);`,
+    `import assert from 'node:assert/strict';\n${exported.map((entry, i) => `const m${i} = await import('${entry}'); assert(Object.keys(m${i}).length > 0);`).join('\n')}\nassert.equal(Object.keys(m0).length, 45); const c = m0.useCounter(); c.inc(); assert.equal(c.count.value, 1);`,
   );
   execFileSync('node', ['check.mjs'], { cwd: consumer, stdio: 'pipe' });
   writeFileSync(

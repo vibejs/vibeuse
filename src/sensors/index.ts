@@ -154,3 +154,8 @@ export function useDevicePixelRatio(options: { window?: Window } = {}) {
     return { pixelRatio: pixelRatio as Readonly<typeof pixelRatio> };
   });
 }
+export {
+  useGeolocation,
+  type GeolocationSnapshot,
+  type UseGeolocationOptions,
+} from './geolocation.ts';

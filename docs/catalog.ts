@@ -135,6 +135,15 @@ export const functions: FunctionDoc[] = [
     'Requires the modern MediaQueryList change event. No legacy addListener fallback or polling.',
   ),
   doc(
+    'useBreakpoints',
+    'Browser',
+    'Track named min-width breakpoints from the viewport.',
+    `const viewport = useBreakpoints({ sm: 640, md: 768, lg: 1024 });\nconst compact = viewport.smaller('md');`,
+    'A reactive map of names to CSS-pixel minimums. Optional window. fallback is used only when matchMedia is missing.',
+    'Readonly active and current; matches(name), greater(name), smaller(name), between(min, max); isSupported; stop().',
+    'Minimum widths only. Non-finite values are ignored. There is no server snapshot; a missing matchMedia keeps the fallback names that still exist in the map.',
+  ),
+  doc(
     'usePreferredDark',
     'Browser',
     'Read the operating system dark color preference.',
@@ -265,6 +274,15 @@ export const functions: FunctionDoc[] = [
     'Uses native scrollTo; smooth scroll position follows actual scroll events. Content-only extent changes require measure(). Boundaries currently assume normal left-to-right, non-reversed scroll coordinates.',
   ),
   doc(
+    'useInfiniteScroll',
+    'Elements',
+    'Load more content when a scroll edge is within a distance.',
+    `const list = shallowRef<HTMLElement | null>(null);\nconst feed = useInfiniteScroll(list, () => {}, { distance: 80 });`,
+    'direction defaults to bottom. distance defaults to 0 CSS pixels. interval defaults to 0. canLoadMore gates a check. Optional window for resize.',
+    'Readonly isLoading and error; check(), stop().',
+    'One edge per call. A rejected loader is stored on error. Automatic follow-up loads run only when the scroll metrics change. The composable does not render or virtualize the list.',
+  ),
+  doc(
     'useFocus',
     'Elements',
     'Track focus and control a nullable focusable element.',
@@ -326,6 +344,15 @@ export const functions: FunctionDoc[] = [
     'Optional window. Fallback ratio is one.',
     'Readonly pixelRatio; stop().',
     'Resolution media queries are rearmed for each density change; resize also refreshes the value. A missing matchMedia falls back to resize events.',
+  ),
+  doc(
+    'useGeolocation',
+    'Sensors',
+    'Watch the browser geolocation API when it exists.',
+    `const location = useGeolocation({ immediate: false });\nlocation.resume();`,
+    'immediate defaults to true. Optional navigator, enableHighAccuracy, timeout and maximumAge.',
+    'Readonly coords, timestamp and error; isSupported; pause(), resume(), stop().',
+    'A missing Geolocation API stays inactive and never invents a position. The browser may prompt when a watch starts. Coordinates are a snapshot, not a live browser object.',
   ),
   doc(
     'useIntervalFn',

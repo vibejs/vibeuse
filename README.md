@@ -2,7 +2,7 @@
 
 **Essential composables for vibe.js.**
 
-`@usevibejs/use` provides 42 native, typed composables for [vibe.js](https://vibejs.org): local reactivity, browser APIs, storage, elements, sensors and scheduling. One ESM package, no runtime dependencies, and automatic effect-scope cleanup.
+`@usevibejs/use` provides 45 native, typed composables for [vibe.js](https://vibejs.org): local reactivity, browser APIs, storage, elements, sensors and scheduling. One ESM package, no runtime dependencies, and automatic effect-scope cleanup.
 
 ## Install
 
@@ -35,10 +35,10 @@ const { copy, copied } = useClipboard();
 | Category | Composables |
 | --- | --- |
 | Reactivity | useDebounce, useDebounceFn, useThrottle, useThrottleFn, usePrevious, useCounter, useToggle, useCycle, useEventBus, useRefHistory |
-| Browser | useEventListener, useWindowSize, useMediaQuery, usePreferredDark, useDark, useDocumentVisibility, useOnline, useClipboard, useTitle, useFavicon, usePermission, useSupported |
+| Browser | useEventListener, useWindowSize, useMediaQuery, useBreakpoints, usePreferredDark, useDark, useDocumentVisibility, useOnline, useClipboard, useTitle, useFavicon, usePermission, useSupported |
 | Storage | useStorage, useLocalStorage, useSessionStorage |
-| Elements | useElementSize, useElementBounding, useIntersectionObserver, useResizeObserver, useMutationObserver, useScroll, useFocus, useClickOutside |
-| Sensors | useMouse, useMouseInElement, useKeyModifier, useKeyPressed, useDevicePixelRatio |
+| Elements | useElementSize, useElementBounding, useIntersectionObserver, useResizeObserver, useMutationObserver, useScroll, useInfiniteScroll, useFocus, useClickOutside |
+| Sensors | useMouse, useMouseInElement, useKeyModifier, useKeyPressed, useDevicePixelRatio, useGeolocation |
 | Timers | useIntervalFn, useTimeoutFn, useRafFn, useIdleCallback |
 
 Imports are available from the root and `/reactivity`, `/browser`, `/storage`, `/elements`, `/sensors`, `/timers`. There are no unsupported function subpaths.
@@ -58,7 +58,7 @@ Imports are available from the root and `/reactivity`, `/browser`, `/storage`, `
 
 Vibecn remains an optional UI layer; see [integration guidance](docs/advanced/integrating-with-vibecn.md). VibeUse does not implement query caching, form state, routing or advanced animation.
 
-Scroll boundaries currently assume normal LTR, non-reversed coordinates. Content-only extent changes require `measure()`. Mouse APIs track mouse events and CSS-pixel coordinates, without touch or pen modes. Observer options are fixed per call. Missing idle callbacks have no fabricated fallback. Browser clipboard, permission and storage restrictions still apply. Element measurements update on observed size/scroll/resize; unrelated positional changes require `update()`.
+Scroll boundaries currently assume normal LTR, non-reversed coordinates. Content-only extent changes require `measure()`. Mouse APIs track mouse events and CSS-pixel coordinates, without touch or pen modes. Observer options are fixed per call. Missing idle callbacks have no fabricated fallback. Browser clipboard, permission and storage restrictions still apply. Element measurements update on observed size/scroll/resize; unrelated positional changes require `update()`. Breakpoints are min-width queries. Geolocation reports a position only after the browser geolocation API does. Infinite scroll watches one edge and does not virtualize the list.
 
 ## Documentation
 

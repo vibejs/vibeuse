@@ -5,3 +5,5 @@ Browser globals are resolved when a function is called, never at module evaluati
 Clipboard writes resolve asynchronously. A true result means the browser write resolved successfully; errors are available through error. Clipboard security and user-gesture requirements vary by browser. See [MDN writeText](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText).
 
 Permission queries never request access. Unsupported permission descriptors can reject even when the Permissions API exists. unknown plus error is distinct from denied or unsupported. No polling is added for missing APIs.
+
+`useBreakpoints` subscribes to one `min-width` query per finite named width. `useGeolocation` calls `watchPosition` only when the Geolocation API exists. `useInfiniteScroll` calls its loader near one scroll edge. None of these read a server render.
