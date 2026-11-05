@@ -4,7 +4,7 @@ import { effectScope } from '@usevibejs/ui';
 import * as use from '../src/index.ts';
 
 it('imports every entry and creates browser composables without browser globals', async () => {
-  expect(Object.keys(use).filter((key) => key.startsWith('use'))).toHaveLength(42);
+  expect(Object.keys(use).filter((key) => key.startsWith('use'))).toHaveLength(45);
   const scope = effectScope();
   const state = scope.run(() => ({
     size: use.useWindowSize({ initialWidth: 20, initialHeight: 30 }),
@@ -31,6 +31,9 @@ it('imports every entry and creates browser composables without browser globals'
     key: use.useKeyPressed('x'),
     modifier: use.useKeyModifier('Shift'),
     ratio: use.useDevicePixelRatio(),
+    breakpoints: use.useBreakpoints({ sm: 640 }),
+    location: use.useGeolocation({ immediate: false }),
+    feed: use.useInfiniteScroll(null, () => {}),
     raf: use.useRafFn(() => {}),
     idle: use.useIdleCallback(() => {}),
   }))!;
@@ -40,6 +43,10 @@ it('imports every entry and creates browser composables without browser globals'
   expect(state.session.isSupported).toBe(false);
   expect(state.permission.state.value).toBe('unsupported');
   expect(state.ratio.pixelRatio.value).toBe(1);
+  expect(state.breakpoints.isSupported).toBe(false);
+  expect(state.breakpoints.active.value).toEqual([]);
+  expect(state.location.isSupported).toBe(false);
+  expect(state.location.coords.value).toBeNull();
   expect(state.online.isOnline.value).toBe(true);
   expect(state.visibility.visibility.value).toBe('visible');
   expect(await state.clipboard.copy('x')).toBe(false);

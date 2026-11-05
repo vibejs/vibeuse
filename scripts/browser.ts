@@ -115,7 +115,7 @@ try {
     await page.locator(`[data-demo="${fn.name}"] .readout`).waitFor();
     await read();
   }
-  checks.push('all 42 production .vibe demos mount');
+  checks.push('all 45 production .vibe demos mount');
   await route('useDebounce');
   await page.getByRole('textbox', { name: 'useDebounce value' }).fill('search');
   assert.notEqual((await read()).debounced, 'search');

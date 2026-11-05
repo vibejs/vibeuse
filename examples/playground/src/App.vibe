@@ -44,7 +44,7 @@ const groupPath = (group: string) => group === 'Getting started' ? 'getting-star
       <label class="search"><span>⌕</span><input v-model="search" type="search" placeholder="Find a composable…" aria-label="Find a composable" /></label>
       <nav aria-label="Documentation">
         <div v-for="group in visibleGuides" :key="group.title" class="nav-group"><h2>{{ group.title }}</h2><a v-for="slug in group.pages" :key="slug" :href="'#/' + groupPath(group.title) + '/' + slug" :aria-current="page === groupPath(group.title) + '/' + slug ? 'page' : undefined">{{ title(slug) }}</a></div>
-        <div class="nav-group"><h2>Functions <span>42</span></h2><label class="sr-only" for="category">Filter category</label><select id="category" v-model="category"><option>All</option><option v-for="item in categories" :key="item">{{ item }}</option></select>
+        <div class="nav-group"><h2>Functions <span>{{ functions.length }}</span></h2><label class="sr-only" for="category">Filter category</label><select id="category" v-model="category"><option>All</option><option v-for="item in categories" :key="item">{{ item }}</option></select>
           <a v-for="fn in matching" :key="fn.name" :href="'#/functions/' + fn.name" :aria-current="selected?.name === fn.name ? 'page' : undefined" class="function-link">{{ fn.name }}<span>{{ fn.category }}</span></a>
           <p v-if="!matching.length" class="muted">No composables match.</p>
         </div>
@@ -58,7 +58,7 @@ const groupPath = (group: string) => group === 'Getting started' ? 'getting-star
         <p class="lede">Essential Composables for vibe.js. Small, typed building blocks for the browser, your state, and everything in between.</p>
         <div class="install-command"><code>pnpm add @usevibejs/use</code><button type="button" @click="clipboard.copy('pnpm add @usevibejs/use')" :aria-label="copied ? 'Command copied' : 'Copy install command'">{{ copied ? 'Copied' : 'Copy' }}</button></div>
         <div class="hero-links"><a class="primary-link" href="#/getting-started/quick-start">Start building →</a><a href="#/functions/useDebounce">Explore the composables ↗</a></div>
-        <div class="principles"><div><strong>42 focused functions</strong><span>One package. Six categories.</span></div><div><strong>vibe.js all the way down</strong><span>One reactive runtime.</span></div><div><strong>A clear end to every effect</strong><span>Automatic scope cleanup.</span></div></div>
+        <div class="principles"><div><strong>{{ functions.length }} focused functions</strong><span>One package. Six categories.</span></div><div><strong>vibe.js all the way down</strong><span>One reactive runtime.</span></div><div><strong>A clear end to every effect</strong><span>Automatic scope cleanup.</span></div></div>
         <div class="section-heading"><div><span class="eyebrow">Try it now</span><h2>A little state. A useful history.</h2></div><a href="#/functions/useRefHistory">View API →</a></div>
         <Demo name="useRefHistory" />
       </div>
